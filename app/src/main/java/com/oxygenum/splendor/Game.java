@@ -3,6 +3,7 @@ package com.oxygenum.splendor;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,206 +19,222 @@ import java.util.Random;
 
 public class Game extends AppCompatActivity {
 
-    ArrayList<Card> spisCard_1 = new ArrayList<>();
-    ArrayList<Card> spisCard_2 = new ArrayList<>();
-    ArrayList<Card> spisCard_3 = new ArrayList<>();
-    ArrayList<Aristocrate> arystokraci = new ArrayList<>();
+    ArrayList<Card> cardDeck1 = new ArrayList<>();
+    ArrayList<Card> cardDeck2 = new ArrayList<>();
+    ArrayList<Card> cardDeck3 = new ArrayList<>();
+    ArrayList<Aristocrate> aristocratesDeck = new ArrayList<>();
     ArrayList<Player> players = new ArrayList<>();
-    ArrayList<Integer> zaznaczone = new ArrayList<>();
-    TextView[] chipsy = new TextView[5];
-    TextView[] karty = new TextView[5];
-    TextView[] zetony = new TextView[6];
-    TextView punkty;
-    GameState Gra1;
+    ArrayList<Integer> checked = new ArrayList<>();
+    TextView[] playerChips = new TextView[5];
+    TextView[] playerCards = new TextView[5];
+    TextView[] chips = new TextView[6];
+    TextView points;
+    GameState GameStateClient;
     TableLayout[] tableLayouts;
-    int wybranaKarta = -1;
+    int chosenCard = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        Bundle b = getIntent().getExtras();
         //Brazowe
-        spisCard_1.add(new Card(3, 0, 0, 1, 1, 1, 1));
-        spisCard_1.add(new Card(3, 0, 0, 0, 1, 0, 2));
-        spisCard_1.add(new Card(3, 0, 0, 2, 0, 0, 2));
-        spisCard_1.add(new Card(3, 0, 1, 0, 3, 0, 1));
-        spisCard_1.add(new Card(3, 0, 0, 0, 0, 0, 3));
-        spisCard_1.add(new Card(3, 0, 0, 1, 1, 2, 1));
-        spisCard_1.add(new Card(3, 0, 0, 2, 1, 2, 0));
-        spisCard_1.add(new Card(3, 1, 0, 0, 0, 4, 0));
-        spisCard_2.add(new Card(3, 1, 0, 3, 0, 2, 2));
-        spisCard_2.add(new Card(3, 1, 2, 3, 0, 0, 3));
-        spisCard_2.add(new Card(3, 2, 0, 0, 2, 1, 4));
-        spisCard_2.add(new Card(3, 2, 0, 5, 0, 0, 0));
-        spisCard_2.add(new Card(3, 2, 0, 0, 3, 0, 5));
-        spisCard_2.add(new Card(3, 3, 6, 0, 0, 0, 0));
-        spisCard_3.add(new Card(3, 3, 0, 3, 3, 3, 5));
-        spisCard_3.add(new Card(3, 4, 0, 0, 7, 0, 0));
-        spisCard_3.add(new Card(3, 4, 3, 0, 6, 0, 3));
-        spisCard_3.add(new Card(3, 5, 3, 0, 7, 0, 0));
+        cardDeck1.add(new Card(3, 0, 0, 1, 1, 1, 1));
+        cardDeck1.add(new Card(3, 0, 0, 0, 1, 0, 2));
+        cardDeck1.add(new Card(3, 0, 0, 2, 0, 0, 2));
+        cardDeck1.add(new Card(3, 0, 1, 0, 3, 0, 1));
+        cardDeck1.add(new Card(3, 0, 0, 0, 0, 0, 3));
+        cardDeck1.add(new Card(3, 0, 0, 1, 1, 2, 1));
+        cardDeck1.add(new Card(3, 0, 0, 2, 1, 2, 0));
+        cardDeck1.add(new Card(3, 1, 0, 0, 0, 4, 0));
+        cardDeck2.add(new Card(3, 1, 0, 3, 0, 2, 2));
+        cardDeck2.add(new Card(3, 1, 2, 3, 0, 0, 3));
+        cardDeck2.add(new Card(3, 2, 0, 0, 2, 1, 4));
+        cardDeck2.add(new Card(3, 2, 0, 5, 0, 0, 0));
+        cardDeck2.add(new Card(3, 2, 0, 0, 3, 0, 5));
+        cardDeck2.add(new Card(3, 3, 6, 0, 0, 0, 0));
+        cardDeck3.add(new Card(3, 3, 0, 3, 3, 3, 5));
+        cardDeck3.add(new Card(3, 4, 0, 0, 7, 0, 0));
+        cardDeck3.add(new Card(3, 4, 3, 0, 6, 0, 3));
+        cardDeck3.add(new Card(3, 5, 3, 0, 7, 0, 0));
         //Niebieski
-        spisCard_1.add(new Card(1, 0, 2, 1, 0, 0, 0));
-        spisCard_1.add(new Card(1, 0, 1, 1, 2, 0, 1));
-        spisCard_1.add(new Card(1, 0, 1, 1, 1, 0, 1));
-        spisCard_1.add(new Card(1, 0, 0, 0, 1, 1, 3));
-        spisCard_1.add(new Card(1, 0, 3, 0, 0, 0, 0));
-        spisCard_1.add(new Card(1, 0, 0, 1, 2, 0, 2));
-        spisCard_1.add(new Card(1, 0, 2, 0, 0, 0, 2));
-        spisCard_1.add(new Card(1, 1, 0, 0, 4, 0, 0));
-        spisCard_2.add(new Card(1, 1, 0, 0, 3, 2, 2));
-        spisCard_2.add(new Card(1, 1, 3, 0, 0, 2, 3));
-        spisCard_2.add(new Card(1, 2, 0, 5, 0, 3, 0));
-        spisCard_2.add(new Card(1, 2, 0, 0, 0, 5, 0));
-        spisCard_2.add(new Card(1, 2, 4, 2, 1, 0, 0));
-        spisCard_2.add(new Card(1, 3, 0, 0, 0, 6, 0));
-        spisCard_3.add(new Card(1, 3, 5, 3, 3, 0, 3));
-        spisCard_3.add(new Card(1, 4, 0, 7, 0, 0, 0));
-        spisCard_3.add(new Card(1, 4, 3, 6, 0, 3, 0));
-        spisCard_3.add(new Card(1, 5, 0, 7, 0, 3, 0));
+        cardDeck1.add(new Card(1, 0, 2, 1, 0, 0, 0));
+        cardDeck1.add(new Card(1, 0, 1, 1, 2, 0, 1));
+        cardDeck1.add(new Card(1, 0, 1, 1, 1, 0, 1));
+        cardDeck1.add(new Card(1, 0, 0, 0, 1, 1, 3));
+        cardDeck1.add(new Card(1, 0, 3, 0, 0, 0, 0));
+        cardDeck1.add(new Card(1, 0, 0, 1, 2, 0, 2));
+        cardDeck1.add(new Card(1, 0, 2, 0, 0, 0, 2));
+        cardDeck1.add(new Card(1, 1, 0, 0, 4, 0, 0));
+        cardDeck2.add(new Card(1, 1, 0, 0, 3, 2, 2));
+        cardDeck2.add(new Card(1, 1, 3, 0, 0, 2, 3));
+        cardDeck2.add(new Card(1, 2, 0, 5, 0, 3, 0));
+        cardDeck2.add(new Card(1, 2, 0, 0, 0, 5, 0));
+        cardDeck2.add(new Card(1, 2, 4, 2, 1, 0, 0));
+        cardDeck2.add(new Card(1, 3, 0, 0, 0, 6, 0));
+        cardDeck3.add(new Card(1, 3, 5, 3, 3, 0, 3));
+        cardDeck3.add(new Card(1, 4, 0, 7, 0, 0, 0));
+        cardDeck3.add(new Card(1, 4, 3, 6, 0, 3, 0));
+        cardDeck3.add(new Card(1, 5, 0, 7, 0, 3, 0));
         //Zielony
-        spisCard_1.add(new Card(4, 0, 0, 2, 0, 1, 0));
-        spisCard_1.add(new Card(4, 0, 0, 0, 2, 2, 0));
-        spisCard_1.add(new Card(4, 0, 0, 1, 0, 3, 1));
-        spisCard_1.add(new Card(4, 0, 1, 1, 1, 1, 0));
-        spisCard_1.add(new Card(4, 0, 2, 1, 1, 1, 0));
-        spisCard_1.add(new Card(4, 0, 2, 0, 2, 1, 0));
-        spisCard_1.add(new Card(4, 0, 0, 0, 3, 0, 0));
-        spisCard_1.add(new Card(4, 1, 4, 0, 0, 0, 0));
-        spisCard_2.add(new Card(4, 1, 0, 3, 3, 0, 2));
-        spisCard_2.add(new Card(4, 1, 2, 2, 0, 3, 0));
-        spisCard_2.add(new Card(4, 2, 1, 4, 0, 2, 0));
-        spisCard_2.add(new Card(4, 2, 0, 0, 0, 0, 5));
-        spisCard_2.add(new Card(4, 2, 0, 0, 0, 5, 3));
-        spisCard_2.add(new Card(4, 3, 0, 0, 0, 0, 6));
-        spisCard_3.add(new Card(4, 3, 3, 5, 3, 3, 0));
-        spisCard_3.add(new Card(4, 4, 0, 3, 0, 6, 3));
-        spisCard_3.add(new Card(4, 4, 0, 0, 0, 7, 0));
-        spisCard_3.add(new Card(4, 5, 0, 0, 0, 7, 3));
+        cardDeck1.add(new Card(4, 0, 0, 2, 0, 1, 0));
+        cardDeck1.add(new Card(4, 0, 0, 0, 2, 2, 0));
+        cardDeck1.add(new Card(4, 0, 0, 1, 0, 3, 1));
+        cardDeck1.add(new Card(4, 0, 1, 1, 1, 1, 0));
+        cardDeck1.add(new Card(4, 0, 2, 1, 1, 1, 0));
+        cardDeck1.add(new Card(4, 0, 2, 0, 2, 1, 0));
+        cardDeck1.add(new Card(4, 0, 0, 0, 3, 0, 0));
+        cardDeck1.add(new Card(4, 1, 4, 0, 0, 0, 0));
+        cardDeck2.add(new Card(4, 1, 0, 3, 3, 0, 2));
+        cardDeck2.add(new Card(4, 1, 2, 2, 0, 3, 0));
+        cardDeck2.add(new Card(4, 2, 1, 4, 0, 2, 0));
+        cardDeck2.add(new Card(4, 2, 0, 0, 0, 0, 5));
+        cardDeck2.add(new Card(4, 2, 0, 0, 0, 5, 3));
+        cardDeck2.add(new Card(4, 3, 0, 0, 0, 0, 6));
+        cardDeck3.add(new Card(4, 3, 3, 5, 3, 3, 0));
+        cardDeck3.add(new Card(4, 4, 0, 3, 0, 6, 3));
+        cardDeck3.add(new Card(4, 4, 0, 0, 0, 7, 0));
+        cardDeck3.add(new Card(4, 5, 0, 0, 0, 7, 3));
         //Czerwone
-        spisCard_1.add(new Card(5, 0, 0, 3, 0, 0, 0));
-        spisCard_1.add(new Card(5, 0, 3, 1, 1, 0, 0));
-        spisCard_1.add(new Card(5, 0, 0, 0, 0, 2, 1));
-        spisCard_1.add(new Card(5, 0, 2, 2, 0, 0, 1));
-        spisCard_1.add(new Card(5, 0, 1, 2, 0, 1, 1));
-        spisCard_1.add(new Card(5, 0, 1, 1, 0, 1, 1));
-        spisCard_1.add(new Card(5, 0, 0, 2, 2, 0, 0));
-        spisCard_1.add(new Card(5, 1, 0, 4, 0, 0, 0));
-        spisCard_2.add(new Card(5, 1, 3, 0, 2, 3, 0));
-        spisCard_2.add(new Card(5, 1, 3, 2, 2, 0, 0));
-        spisCard_2.add(new Card(5, 2, 0, 1, 0, 4, 2));
-        spisCard_2.add(new Card(5, 2, 5, 3, 0, 0, 0));
-        spisCard_2.add(new Card(5, 2, 5, 0, 0, 0, 0));
-        spisCard_2.add(new Card(5, 3, 0, 0, 6, 0, 0));
-        spisCard_3.add(new Card(5, 3, 3, 3, 0, 5, 3));
-        spisCard_3.add(new Card(5, 4, 0, 0, 0, 0, 7));
-        spisCard_3.add(new Card(5, 4, 0, 0, 3, 3, 6));
-        spisCard_3.add(new Card(5, 5, 0, 0, 3, 0, 7));
+        cardDeck1.add(new Card(5, 0, 0, 3, 0, 0, 0));
+        cardDeck1.add(new Card(5, 0, 3, 1, 1, 0, 0));
+        cardDeck1.add(new Card(5, 0, 0, 0, 0, 2, 1));
+        cardDeck1.add(new Card(5, 0, 2, 2, 0, 0, 1));
+        cardDeck1.add(new Card(5, 0, 1, 2, 0, 1, 1));
+        cardDeck1.add(new Card(5, 0, 1, 1, 0, 1, 1));
+        cardDeck1.add(new Card(5, 0, 0, 2, 2, 0, 0));
+        cardDeck1.add(new Card(5, 1, 0, 4, 0, 0, 0));
+        cardDeck2.add(new Card(5, 1, 3, 0, 2, 3, 0));
+        cardDeck2.add(new Card(5, 1, 3, 2, 2, 0, 0));
+        cardDeck2.add(new Card(5, 2, 0, 1, 0, 4, 2));
+        cardDeck2.add(new Card(5, 2, 5, 3, 0, 0, 0));
+        cardDeck2.add(new Card(5, 2, 5, 0, 0, 0, 0));
+        cardDeck2.add(new Card(5, 3, 0, 0, 6, 0, 0));
+        cardDeck3.add(new Card(5, 3, 3, 3, 0, 5, 3));
+        cardDeck3.add(new Card(5, 4, 0, 0, 0, 0, 7));
+        cardDeck3.add(new Card(5, 4, 0, 0, 3, 3, 6));
+        cardDeck3.add(new Card(5, 5, 0, 0, 3, 0, 7));
         //Białe
-        spisCard_1.add(new Card(2, 0, 1, 0, 0, 2, 2));
-        spisCard_1.add(new Card(2, 0, 1, 0, 2, 0, 0));
-        spisCard_1.add(new Card(2, 0, 1, 0, 1, 1, 1));
-        spisCard_1.add(new Card(2, 0, 0, 0, 0, 3, 0));
-        spisCard_1.add(new Card(2, 0, 0, 0, 0, 2, 2));
-        spisCard_1.add(new Card(2, 0, 1, 0, 1, 1, 2));
-        spisCard_1.add(new Card(2, 0, 1, 3, 0, 1, 0));
-        spisCard_1.add(new Card(2, 1, 0, 0, 0, 0, 4));
-        spisCard_2.add(new Card(2, 1, 2, 0, 2, 0, 3));
-        spisCard_2.add(new Card(2, 1, 0, 2, 3, 3, 0));
-        spisCard_2.add(new Card(2, 2, 2, 0, 4, 0, 1));
-        spisCard_2.add(new Card(2, 2, 0, 0, 5, 0, 0));
-        spisCard_2.add(new Card(2, 2, 3, 0, 5, 0, 0));
-        spisCard_2.add(new Card(2, 3, 0, 6, 0, 0, 0));
-        spisCard_3.add(new Card(2, 3, 3, 0, 5, 3, 3));
-        spisCard_3.add(new Card(2, 4, 7, 0, 0, 0, 0));
-        spisCard_3.add(new Card(2, 4, 6, 3, 3, 0, 0));
-        spisCard_3.add(new Card(2, 5, 7, 3, 0, 0, 0));
+        cardDeck1.add(new Card(2, 0, 1, 0, 0, 2, 2));
+        cardDeck1.add(new Card(2, 0, 1, 0, 2, 0, 0));
+        cardDeck1.add(new Card(2, 0, 1, 0, 1, 1, 1));
+        cardDeck1.add(new Card(2, 0, 0, 0, 0, 3, 0));
+        cardDeck1.add(new Card(2, 0, 0, 0, 0, 2, 2));
+        cardDeck1.add(new Card(2, 0, 1, 0, 1, 1, 2));
+        cardDeck1.add(new Card(2, 0, 1, 3, 0, 1, 0));
+        cardDeck1.add(new Card(2, 1, 0, 0, 0, 0, 4));
+        cardDeck2.add(new Card(2, 1, 2, 0, 2, 0, 3));
+        cardDeck2.add(new Card(2, 1, 0, 2, 3, 3, 0));
+        cardDeck2.add(new Card(2, 2, 2, 0, 4, 0, 1));
+        cardDeck2.add(new Card(2, 2, 0, 0, 5, 0, 0));
+        cardDeck2.add(new Card(2, 2, 3, 0, 5, 0, 0));
+        cardDeck2.add(new Card(2, 3, 0, 6, 0, 0, 0));
+        cardDeck3.add(new Card(2, 3, 3, 0, 5, 3, 3));
+        cardDeck3.add(new Card(2, 4, 7, 0, 0, 0, 0));
+        cardDeck3.add(new Card(2, 4, 6, 3, 3, 0, 0));
+        cardDeck3.add(new Card(2, 5, 7, 3, 0, 0, 0));
 
-        arystokraci.add(new Aristocrate(4, 5));
-        arystokraci.add(new Aristocrate(1, 2));
-        arystokraci.add(new Aristocrate(1, 4));
-        arystokraci.add(new Aristocrate(2, 3));
-        arystokraci.add(new Aristocrate(3, 5));
-        arystokraci.add(new Aristocrate(2, 3, 5));
-        arystokraci.add(new Aristocrate(1, 4, 5));
-        arystokraci.add(new Aristocrate(1, 2, 4));
-        arystokraci.add(new Aristocrate(2, 3, 1));
-        arystokraci.add(new Aristocrate(3, 4, 5));
+        aristocratesDeck.add(new Aristocrate(4, 5));
+        aristocratesDeck.add(new Aristocrate(1, 2));
+        aristocratesDeck.add(new Aristocrate(1, 4));
+        aristocratesDeck.add(new Aristocrate(2, 3));
+        aristocratesDeck.add(new Aristocrate(3, 5));
+        aristocratesDeck.add(new Aristocrate(2, 3, 5));
+        aristocratesDeck.add(new Aristocrate(1, 4, 5));
+        aristocratesDeck.add(new Aristocrate(1, 2, 4));
+        aristocratesDeck.add(new Aristocrate(2, 3, 1));
+        aristocratesDeck.add(new Aristocrate(3, 4, 5));
 
-        players.add(new Player("Gracz 1", false, R.color.gracz1));
-        players.add(new Player("Gracz 2", false, R.color.colorPrimary));
-        //players.add(new Player("Gracz 3", false));
+        int playerCount = b.getInt("playersNumber", 0);
+        players.add(new Player("Gracz 1", b.getBoolean("p1", true), R.color.player1));
+        players.add(new Player("Gracz 2", b.getBoolean("p2", true), R.color.player4));
+        if (playerCount > 2){
+            players.add(new Player("Gracz 3", b.getBoolean("p3", true), R.color.colorAccent));
+            if (playerCount > 3){
+                players.add(new Player("Gracz 4", b.getBoolean("p4", true), R.color.colorPrimary));
+            }
+        }
+
         Random rand = new Random();
-        Collections.shuffle(spisCard_1, rand);
-        Collections.shuffle(spisCard_2, rand);
-        Collections.shuffle(spisCard_3, rand);
-        Collections.shuffle(arystokraci, rand);
+        Collections.shuffle(cardDeck1, rand);
+        Collections.shuffle(cardDeck2, rand);
+        Collections.shuffle(cardDeck3, rand);
+        Collections.shuffle(aristocratesDeck, rand);
+        GameStateClient = new GameState(cardDeck1, cardDeck2, cardDeck3, aristocratesDeck, players);
+        playerCount = GameStateClient.numberOfPlayers();
+        setCard(GameStateClient.returnCard(3, 1), 3, 1);
+        setCard(GameStateClient.returnCard(3, 2), 3, 2);
+        setCard(GameStateClient.returnCard(3, 3), 3, 3);
+        setCard(GameStateClient.returnCard(3, 4), 3, 4);
+        setCard(GameStateClient.returnCard(2, 1), 2, 1);
+        setCard(GameStateClient.returnCard(2, 2), 2, 2);
+        setCard(GameStateClient.returnCard(2, 3), 2, 3);
+        setCard(GameStateClient.returnCard(2, 4), 2, 4);
+        setCard(GameStateClient.returnCard(1, 1), 1, 1);
+        setCard(GameStateClient.returnCard(1, 2), 1, 2);
+        setCard(GameStateClient.returnCard(1, 3), 1, 3);
+        setCard(GameStateClient.returnCard(1, 4), 1, 4);
 
-        Gra1 = new GameState(spisCard_1, spisCard_2, spisCard_3, arystokraci, players);
-        setCard(Gra1.returnCard(3, 1), 3, 1);
-        setCard(Gra1.returnCard(3, 2), 3, 2);
-        setCard(Gra1.returnCard(3, 3), 3, 3);
-        setCard(Gra1.returnCard(3, 4), 3, 4);
-        setCard(Gra1.returnCard(2, 1), 2, 1);
-        setCard(Gra1.returnCard(2, 2), 2, 2);
-        setCard(Gra1.returnCard(2, 3), 2, 3);
-        setCard(Gra1.returnCard(2, 4), 2, 4);
-        setCard(Gra1.returnCard(1, 1), 1, 1);
-        setCard(Gra1.returnCard(1, 2), 1, 2);
-        setCard(Gra1.returnCard(1, 3), 1, 3);
-        setCard(Gra1.returnCard(1, 4), 1, 4);
-
-        int ile = Gra1.numberOfPlayers();
-
-        switch (ile) {
-            case 2:
+        switch (playerCount) {
+            case 1:
                 TableLayout ar1 = findViewById(R.id.ar1);
                 TableLayout ar5 = findViewById(R.id.ar5);
-                ar1.setVisibility(View.INVISIBLE);
-                ar5.setVisibility(View.INVISIBLE);
-                setAristocrates(Gra1.returnAristocrate(), 2);
-                setAristocrates(Gra1.returnAristocrate(), 3);
-                setAristocrates(Gra1.returnAristocrate(), 4);
-                break;
-            case 3:
                 TableLayout ar3 = findViewById(R.id.ar3);
                 ar3.setVisibility(View.INVISIBLE);
-                setAristocrates(Gra1.returnAristocrate(), 1);
-                setAristocrates(Gra1.returnAristocrate(), 2);
-                setAristocrates(Gra1.returnAristocrate(), 4);
-                setAristocrates(Gra1.returnAristocrate(), 5);
+                ar1.setVisibility(View.INVISIBLE);
+                ar5.setVisibility(View.INVISIBLE);
+                setAristocrates(GameStateClient.returnAristocrate(0), 2);
+                setAristocrates(GameStateClient.returnAristocrate(1), 4);
+                break;
+            case 2:
+                ar1 = findViewById(R.id.ar1);
+                ar5 = findViewById(R.id.ar5);
+                ar1.setVisibility(View.INVISIBLE);
+                ar5.setVisibility(View.INVISIBLE);
+                setAristocrates(GameStateClient.returnAristocrate(0), 2);
+                setAristocrates(GameStateClient.returnAristocrate(1), 3);
+                setAristocrates(GameStateClient.returnAristocrate(2), 4);
+                break;
+            case 3:
+                ar3 = findViewById(R.id.ar3);
+                ar3.setVisibility(View.INVISIBLE);
+                setAristocrates(GameStateClient.returnAristocrate(0), 1);
+                setAristocrates(GameStateClient.returnAristocrate(1), 2);
+                setAristocrates(GameStateClient.returnAristocrate(2), 4);
+                setAristocrates(GameStateClient.returnAristocrate(3), 5);
                 break;
             case 4:
-                setAristocrates(Gra1.returnAristocrate(), 1);
-                setAristocrates(Gra1.returnAristocrate(), 2);
-                setAristocrates(Gra1.returnAristocrate(), 3);
-                setAristocrates(Gra1.returnAristocrate(), 4);
-                setAristocrates(Gra1.returnAristocrate(), 5);
+                setAristocrates(GameStateClient.returnAristocrate(0), 1);
+                setAristocrates(GameStateClient.returnAristocrate(1), 2);
+                setAristocrates(GameStateClient.returnAristocrate(2), 3);
+                setAristocrates(GameStateClient.returnAristocrate(3), 4);
+                setAristocrates(GameStateClient.returnAristocrate(4), 5);
                 break;
         }
 
-        chipsy[0] = findViewById(R.id.chips1);
-        chipsy[1] = findViewById(R.id.chips2);
-        chipsy[2] = findViewById(R.id.chips3);
-        chipsy[3] = findViewById(R.id.chips4);
-        chipsy[4] = findViewById(R.id.chips5);
+        playerChips[0] = findViewById(R.id.chips1);
+        playerChips[1] = findViewById(R.id.chips2);
+        playerChips[2] = findViewById(R.id.chips3);
+        playerChips[3] = findViewById(R.id.chips4);
+        playerChips[4] = findViewById(R.id.chips5);
 
-        karty[0] = findViewById(R.id.karta1);
-        karty[1] = findViewById(R.id.karta2);
-        karty[2] = findViewById(R.id.karta3);
-        karty[3] = findViewById(R.id.karta4);
-        karty[4] = findViewById(R.id.karta5);
+        playerCards[0] = findViewById(R.id.card1);
+        playerCards[1] = findViewById(R.id.card2);
+        playerCards[2] = findViewById(R.id.card3);
+        playerCards[3] = findViewById(R.id.card4);
+        playerCards[4] = findViewById(R.id.karta5);
 
-        zetony[0] = findViewById(R.id.zeton1);
-        zetony[1] = findViewById(R.id.zeton2);
-        zetony[2] = findViewById(R.id.zeton3);
-        zetony[3] = findViewById(R.id.zeton4);
-        zetony[4] = findViewById(R.id.zeton5);
-        zetony[5] = findViewById(R.id.zeton6);
+        chips[0] = findViewById(R.id.zeton1);
+        chips[1] = findViewById(R.id.zeton2);
+        chips[2] = findViewById(R.id.zeton3);
+        chips[3] = findViewById(R.id.zeton4);
+        chips[4] = findViewById(R.id.zeton5);
+        chips[5] = findViewById(R.id.zeton6);
 
-        punkty = findViewById(R.id.punkty);
+        points = findViewById(R.id.punkty);
 
         tableLayouts = new TableLayout[12];
-        tableLayouts[0] = findViewById(R.id.karta_1_1);
+        tableLayouts[0] = findViewById(R.id.card_1_1);
         tableLayouts[1] = findViewById(R.id.karta_1_2);
         tableLayouts[2] = findViewById(R.id.karta_1_3);
         tableLayouts[3] = findViewById(R.id.karta_1_4);
@@ -231,18 +248,17 @@ public class Game extends AppCompatActivity {
         tableLayouts[11] = findViewById(R.id.karta_3_4);
 
         for (int i = 0; i < 5; i++) {
-            final TextView act_chips = chipsy[i];
+            final TextView act_chips = playerChips[i];
             final int nr = i;
             act_chips.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    if (zaznaczone.size() != 0) {
+                    if (checked.size() != 0) {
 
                         for (int i = 0; i < 5; i++) {
-                            if (zaznaczone.contains(i)) {
-                                scaleView(chipsy[i], 1.2f, 1f);
-                                //zaznaczone.remove(zaznaczone.indexOf(i));
-                                zaznaczone.remove(Integer.valueOf(i));
+                            if (checked.contains(i)) {
+                                scaleView(playerChips[i], 1.2f, 1f);
+                                checked.remove(Integer.valueOf(i));
 
                             }
                         }
@@ -251,16 +267,17 @@ public class Game extends AppCompatActivity {
                     AlertDialog.Builder builder = new AlertDialog.Builder(Game.this);
                     final View widok = v;
                     builder.setTitle("Prośba o potwierdzenie");
-                    builder.setMessage("Czy chcesz dwa zetony tego koloru?")
+                    builder.setMessage("Czy chcesz dwa chips tego koloru?")
                             .setCancelable(false)
                             .setPositiveButton("TAK", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    if (Gra1.getChips(nr) >= 4) {
-                                        Gra1.incrementChips(nr);
-                                        Gra1.incrementChips(nr);
-                                        Gra1.returnGracz().addChips(nr);
-                                        Gra1.returnGracz().addChips(nr);
+                                    if (GameStateClient.getChips(nr) >= 4) {
+                                        GameStateClient.decrementChips(nr);
+                                        GameStateClient.decrementChips(nr);
+                                        GameStateClient.returnPlayer().addChips(nr);
+                                        GameStateClient.returnPlayer().addChips(nr);
                                         setChips();
+                                        setPlayerField();
                                         AlertDialog.Builder alert = new AlertDialog.Builder(Game.this);
                                         alert.setTitle("Komunikat");
                                         alert.setMessage("Teraz tura następnego gracza");
@@ -269,15 +286,20 @@ public class Game extends AppCompatActivity {
                                             }
                                         });
                                         alert.show();
-                                        Gra1.nextGracz();
-                                        setPlayerField();
-                                    }
-                                    else{
+                                        if (!GameStateClient.nextPlayerTurn()) {
+                                            computerPlayer();
+                                        }
+                                        Handler handler = new Handler();
+                                        handler.postDelayed(new Runnable() {
+                                            public void run() {
+                                                setPlayerField();
+                                            }
+                                        }, 1);
+                                    } else {
                                         AlertDialog.Builder builder = new AlertDialog.Builder(Game.this);
                                         builder.setTitle("Nieprawidlowy ruch");
                                         builder.setMessage("Nie mozesz wziac dwoch zetonow, jesli w stosie jest mniej niż 4")
-                                                .setNeutralButton("OK",null);
-                                        // Create the AlertDialog object and return it
+                                                .setNeutralButton("OK", null);
                                         builder.create().show();
                                     }
                                     scaleView(widok, 1.2f, 1f);
@@ -296,9 +318,16 @@ public class Game extends AppCompatActivity {
             });
             act_chips.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    scaleView(v, 1, 1.2f);
-                    zaznaczone.add(returnNr(getResources().getResourceEntryName(act_chips.getId())));
-                    if (zaznaczone.size() == 3) {
+                    int clickedChipsNr = returnNr(getResources().getResourceEntryName(act_chips.getId()));
+                    if(!checked.contains(clickedChipsNr)){
+                        scaleView(v, 1, 1.2f);
+                        checked.add(clickedChipsNr);
+                    }
+                    else{
+                        scaleView(v, 1.2f, 1f);
+                        checked.remove(checked.indexOf(clickedChipsNr));
+                    }
+                    if (checked.size() == 3) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(Game.this);
                         builder.setTitle("Prośba o potwierdzenie");
                         builder.setMessage("Czy wybrales odpowiednie?")
@@ -318,20 +347,23 @@ public class Game extends AppCompatActivity {
                     }
                 }
             });
-
         }
         setChips();
-        setPlayerField();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                setPlayerField();
+            }
+        }, 1);
 
     }
 
     public void chips_positive() {
-        Toast.makeText(Game.this, zaznaczone.toString(), Toast.LENGTH_LONG).show();
         boolean status = true;
         for (int i = 0; i < 5; i++) {
-            if (zaznaczone.contains(i)) {
-                scaleView(chipsy[i], 1.2f, 1f);
-                if (Gra1.getChips(i) == 0){
+            if (checked.contains(i)) {
+                scaleView(playerChips[i], 1.2f, 1f);
+                if (GameStateClient.getChips(i) == 0) {
                     status = false;
                 }
             }
@@ -339,74 +371,110 @@ public class Game extends AppCompatActivity {
         }
         if (status) {
             for (int i = 0; i < 5; i++) {
-                if (zaznaczone.contains(i)) {
-                    Gra1.returnGracz().addChips(i);
-                    Gra1.incrementChips(i);
+                if (checked.contains(i)) {
+                    GameStateClient.returnPlayer().addChips(i);
+                    GameStateClient.decrementChips(i);
                 }
 
             }
-            zaznaczone.removeAll(zaznaczone);
+            checked.removeAll(checked);
             setChips();
+            setPlayerField();
             AlertDialog.Builder alert = new AlertDialog.Builder(Game.this);
             alert.setTitle("Komunikat");
             alert.setMessage("Teraz tura następnego gracza");
             alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+                    if (!GameStateClient.nextPlayerTurn()) {
+                        computerPlayer();
+                    }
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            setPlayerField();
+                        }
+                    }, 1);
                 }
             });
             alert.show();
-            Gra1.nextGracz();
-            setPlayerField();
-        }
-        else{
+
+        } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(Game.this);
             builder.setTitle("Nieprawidlowy ruch");
             builder.setMessage("Nie mozesz wziac zetonow, jesli w stosie juz ich nie ma")
-                    .setNeutralButton("OK",null);
+                    .setNeutralButton("OK", null);
             builder.create().show();
         }
     }
 
     public void chips_negative() {
         for (int i = 0; i < 5; i++) {
-            if (zaznaczone.contains(i)) {
-                scaleView(chipsy[i], 1.2f, 1f);
-                zaznaczone.remove(zaznaczone.indexOf(i));
+            if (checked.contains(i)) {
+                scaleView(playerChips[i], 1.2f, 1f);
+                checked.remove(checked.indexOf(i));
             }
         }
         setChips();
-        setPlayerField();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                setPlayerField();
+            }
+        }, 1);
     }
 
     public void setChips() {
-        chipsy[0].setText(Gra1.getChipsStr(0));
-        chipsy[1].setText(Gra1.getChipsStr(1));
-        chipsy[2].setText(Gra1.getChipsStr(2));
-        chipsy[3].setText(Gra1.getChipsStr(3));
-        chipsy[4].setText(Gra1.getChipsStr(4));
+        playerChips[0].setText(GameStateClient.getChipsStr(0));
+        playerChips[1].setText(GameStateClient.getChipsStr(1));
+        playerChips[2].setText(GameStateClient.getChipsStr(2));
+        playerChips[3].setText(GameStateClient.getChipsStr(3));
+        playerChips[4].setText(GameStateClient.getChipsStr(4));
     }
 
     public void setPlayerField() {
         for (int i = 0; i < 5; i++) {
-            karty[i].setText(Gra1.returnGracz().getCardSymbolsStr(i));
-            zetony[i].setText(Gra1.returnGracz().getChipsStr(i));
+            playerCards[i].setText(GameStateClient.returnPlayer().getCardSymbolsStr(i));
+            chips[i].setText(GameStateClient.returnPlayer().getChipsStr(i));
         }
-        zetony[5].setText(Gra1.returnGracz().getChipsStr(5));
-        punkty.setText(Gra1.returnGracz().getPoints());
-        View tlo = findViewById(R.id.tlo);
-        tlo.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(Gra1.returnGracz().getTlo())));
+        chips[5].setText(GameStateClient.returnPlayer().getChipsStr(5));
+        points.setText(GameStateClient.returnPlayer().getPointsStr());
+        View playerBackground = findViewById(R.id.tlo);
+        playerBackground.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(GameStateClient.returnPlayer().getBackground())));
+    }
+
+    public void unsetAristocrate(int nr) {
+        TableLayout ar1 = findViewById(R.id.ar1);
+        TableLayout ar2 = findViewById(R.id.ar2);
+        TableLayout ar3 = findViewById(R.id.ar3);
+        TableLayout ar4 = findViewById(R.id.ar4);
+        TableLayout ar5 = findViewById(R.id.ar5);
+        TableLayout[] ar = new TableLayout[5];
+        ar[0] = ar1;
+        ar[1] = ar2;
+        ar[2] = ar3;
+        ar[3] = ar4;
+        ar[4] = ar5;
+        int status = 0;
+        for (int i = 0; i < 5; i++) {
+            if (ar[i].getVisibility() != View.INVISIBLE) {
+                if (status == nr) {
+                    ar[i].setVisibility(View.INVISIBLE);
+                }
+                status++;
+            }
+        }
     }
 
     public void setAristocrates(Aristocrate ar, int nr) {
         TextView w1;
         TextView w2;
         TextView w3;
-        int ile = ar.getStatus();
+        int ile = ar.getFields();
         switch (nr) {
             case 1:
-                w1 = findViewById(R.id.arystokrata_1_wymaganie_2);
-                w2 = findViewById(R.id.arystokrata_1_wymaganie_3);
-                w3 = findViewById(R.id.arystokrata_1_wymaganie_1);
+                w1 = findViewById(R.id.ar1Con2);
+                w2 = findViewById(R.id.ar1con3);
+                w3 = findViewById(R.id.ar1Con1);
 
                 w1.setBackground(getDrawable(ar.getWym1()));
                 w2.setBackground(getDrawable(ar.getWym2()));
@@ -420,10 +488,11 @@ public class Game extends AppCompatActivity {
                     w1.setText("4");
                     w2.setText("4");
                 }
+                break;
             case 2:
-                w1 = findViewById(R.id.arystokrata_2_wymaganie_2);
-                w2 = findViewById(R.id.arystokrata_2_wymaganie_3);
-                w3 = findViewById(R.id.arystokrata_2_wymaganie_1);
+                w1 = findViewById(R.id.ar2Con2);
+                w2 = findViewById(R.id.ar2Con3);
+                w3 = findViewById(R.id.ar2Con1);
 
                 w1.setBackground(getDrawable(ar.getWym1()));
                 w2.setBackground(getDrawable(ar.getWym2()));
@@ -437,10 +506,11 @@ public class Game extends AppCompatActivity {
                     w1.setText("4");
                     w2.setText("4");
                 }
+                break;
             case 3:
-                w1 = findViewById(R.id.arystokrata_3_wymaganie_2);
-                w2 = findViewById(R.id.arystokrata_3_wymaganie_3);
-                w3 = findViewById(R.id.arystokrata_3_wymaganie_1);
+                w1 = findViewById(R.id.ar3Con2);
+                w2 = findViewById(R.id.ar3Con3);
+                w3 = findViewById(R.id.ar3Con1);
 
                 w1.setBackground(getDrawable(ar.getWym1()));
                 w2.setBackground(getDrawable(ar.getWym2()));
@@ -454,10 +524,11 @@ public class Game extends AppCompatActivity {
                     w1.setText("4");
                     w2.setText("4");
                 }
+                break;
             case 4:
-                w1 = findViewById(R.id.arystokrata_4_wymaganie_2);
-                w2 = findViewById(R.id.arystokrata_4_wymaganie_3);
-                w3 = findViewById(R.id.arystokrata_4_wymaganie_1);
+                w1 = findViewById(R.id.ar4Con2);
+                w2 = findViewById(R.id.ar4Con3);
+                w3 = findViewById(R.id.ar4Con1);
 
                 w1.setBackground(getDrawable(ar.getWym1()));
                 w2.setBackground(getDrawable(ar.getWym2()));
@@ -471,10 +542,11 @@ public class Game extends AppCompatActivity {
                     w1.setText("4");
                     w2.setText("4");
                 }
+                break;
             case 5:
-                w1 = findViewById(R.id.arystokrata_5_wymaganie_2);
-                w2 = findViewById(R.id.arystokrata_5_wymaganie_3);
-                w3 = findViewById(R.id.arystokrata_5_wymaganie_1);
+                w1 = findViewById(R.id.ar5Con2);
+                w2 = findViewById(R.id.ar5Con3);
+                w3 = findViewById(R.id.ar5Con1);
 
                 w1.setBackground(getDrawable(ar.getWym1()));
                 w2.setBackground(getDrawable(ar.getWym2()));
@@ -488,63 +560,106 @@ public class Game extends AppCompatActivity {
                     w1.setText("4");
                     w2.setText("4");
                 }
+                break;
 
         }
 
     }
 
-    public void click_card(View view) {
-        int kliknieta = -1;
-        for (int i = 0; i<12;i++){
-            if (tableLayouts[i].getId()== view.getId()){
-                kliknieta = i;
+    public void clickCard(View view) {
+        int clickedCard = -1;
+        for (int i = 0; i < 12; i++) {
+            if (tableLayouts[i].getId() == view.getId()) {
+                clickedCard = i;
             }
         }
 
-        if(wybranaKarta != kliknieta){
+        if (chosenCard != clickedCard) {
             setOpacityCards(0.5f);
             view.setAlpha(1.0f);
             scaleView(view, 1, 1.05f);
             scaleView(view, 1.05f, 1f);
-            wybranaKarta = kliknieta;
-        }
-        else{
-            int era = kliknieta/4 + 1;
-            int nr = kliknieta%4 + 1;
-            if (Gra1.canObtain(Gra1.returnCard(era, nr), Gra1.returnGracz())){
-                Gra1.swapCard(era, nr); //rowniez dodaje karte graczowi
-                setCard(Gra1.returnCard(era, nr), era, nr);
-                Gra1.returnGracz().addChips(nr);
+            chosenCard = clickedCard;
+        } else {
+            int era = clickedCard / 4 + 1;
+            int nr = clickedCard % 4 + 1;
+            if (GameStateClient.canObtain(GameStateClient.returnCard(era, nr), GameStateClient.returnPlayer())) {
+                GameStateClient.swapCard(era, nr); //rowniez dodaje karte graczowi
+                int ktory = GameStateClient.checkAristocrate(GameStateClient.returnPlayer());
+                if (ktory != -1) {
+                    unsetAristocrate(ktory);
+                }
+                setCard(GameStateClient.returnCard(era, nr), era, nr);
                 setChips();
+                setPlayerField();
                 AlertDialog.Builder alert = new AlertDialog.Builder(Game.this);
                 alert.setTitle("Info");
                 alert.setMessage("Teraz tura następnego gracza");
-                alert.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        if (!GameStateClient.nextPlayerTurn()) {
+                            computerPlayer();
+                        }
+                        setOpacityCards(1f);
+                        chosenCard = -44;
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                setPlayerField();
+                            }
+                        }, 1);
                     }
                 });
                 alert.show();
-                alert.setPositiveButton("OK",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                });
-                Gra1.nextGracz();
-                setPlayerField();
-            }
-            else{
+
+            } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(Game.this);
                 builder.setTitle("Nieprawidlowy ruch");
-                builder.setMessage("Nie mozesz wziac karty jeśli Cię na nią nie stać")
-                        .setNeutralButton("OK",null);
+                builder.setMessage("Nie mozesz wziac kart jeśli Cię na nią nie stać")
+                        .setNeutralButton("OK", null);
                 builder.create().show();
             }
-            kliknieta = -1;
+            clickedCard = -1;
         }
+    isWin();
+    }
 
+    public void clickCardComputer(int era, int nr) {
+        //Toast.makeText(this, era+" "+nr, Toast.LENGTH_LONG).show();
+        GameStateClient.swapCard(era, nr); //rowniez dodaje karte graczowi
+        int ktory = GameStateClient.checkAristocrate(GameStateClient.returnPlayer());
+        if (ktory != -1) {
+            unsetAristocrate(ktory);
+        }
+        setCard(GameStateClient.returnCard(era, nr), era, nr);
+        setChips();
+        setPlayerField();
+        Handler handler2 = new Handler();
+        handler2.postDelayed(new Runnable() {
+            public void run() {
+                AlertDialog.Builder alert = new AlertDialog.Builder(Game.this);
+                alert.setTitle("KOMP KLIK KARD");
+                alert.setMessage("Teraz tura następnego gracza");
+                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (!GameStateClient.nextPlayerTurn()) {
+                            computerPlayer();
+                        }
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                setPlayerField();
+                            }
+                        }, 1);
+                    }
+                });
+                alert.show();
+            }
+        }, 2000);
+    isWin();
     }
 
     public int returnNr(String s) {
-        Toast.makeText(Game.this, s, Toast.LENGTH_LONG).show();
         return Integer.parseInt(s.substring(s.length() - 1)) - 1;
     }
 
@@ -571,13 +686,13 @@ public class Game extends AppCompatActivity {
             TextView w2 = findViewById(R.id.wymaganie_2_karta_1_1);
             TextView w3 = findViewById(R.id.wymaganie_3_karta_1_1);
             TextView w4 = findViewById(R.id.wymaganie_4_karta_1_1);
-            TextView punkty = findViewById(R.id.punkty_1_1);
-            TableLayout kolor = findViewById(R.id.karta_1_1);
-            kolor.setBackground(getDrawable(card.getColorDrawable()));
-            w4.setBackground(getDrawable(card.getWym1_tlo()));
-            w3.setBackground(getDrawable(card.getWym2_tlo()));
-            w1.setBackground(getDrawable(card.getWym3_tlo()));
-            w2.setBackground(getDrawable(card.getWym4_tlo()));
+            TextView tvPoints = findViewById(R.id.points_1_1);
+            TableLayout tlColor = findViewById(R.id.card_1_1);
+            tlColor.setBackground(getDrawable(card.getColorDrawable()));
+            w4.setBackground(getDrawable(card.getWym1Background()));
+            w3.setBackground(getDrawable(card.getWym2Background()));
+            w1.setBackground(getDrawable(card.getWym3Background()));
+            w2.setBackground(getDrawable(card.getWym4Background()));
             if (card.getWym1() != "") {
                 w4.setVisibility(View.VISIBLE);
                 w4.setText(card.getWym1());
@@ -602,7 +717,7 @@ public class Game extends AppCompatActivity {
             } else {
                 w2.setVisibility(View.INVISIBLE);
             }
-            punkty.setText(card.getPointsStr());
+            tvPoints.setText(card.getPointsStr());
         }
         if (era == 1 && nr == 2) {
             TextView w1 = findViewById(R.id.wymaganie_1_karta_1_2);
@@ -612,10 +727,10 @@ public class Game extends AppCompatActivity {
             TextView punkty = findViewById(R.id.punkty_1_2);
             TableLayout kolor = findViewById(R.id.karta_1_2);
             kolor.setBackground(getDrawable(card.getColorDrawable()));
-            w4.setBackground(getDrawable(card.getWym1_tlo()));
-            w3.setBackground(getDrawable(card.getWym2_tlo()));
-            w1.setBackground(getDrawable(card.getWym3_tlo()));
-            w2.setBackground(getDrawable(card.getWym4_tlo()));
+            w4.setBackground(getDrawable(card.getWym1Background()));
+            w3.setBackground(getDrawable(card.getWym2Background()));
+            w1.setBackground(getDrawable(card.getWym3Background()));
+            w2.setBackground(getDrawable(card.getWym4Background()));
             if (card.getWym1() != "") {
                 w4.setVisibility(View.VISIBLE);
                 w4.setText(card.getWym1());
@@ -650,10 +765,10 @@ public class Game extends AppCompatActivity {
             TextView punkty = findViewById(R.id.punkty_1_3);
             TableLayout kolor = findViewById(R.id.karta_1_3);
             kolor.setBackground(getDrawable(card.getColorDrawable()));
-            w4.setBackground(getDrawable(card.getWym1_tlo()));
-            w3.setBackground(getDrawable(card.getWym2_tlo()));
-            w1.setBackground(getDrawable(card.getWym3_tlo()));
-            w2.setBackground(getDrawable(card.getWym4_tlo()));
+            w4.setBackground(getDrawable(card.getWym1Background()));
+            w3.setBackground(getDrawable(card.getWym2Background()));
+            w1.setBackground(getDrawable(card.getWym3Background()));
+            w2.setBackground(getDrawable(card.getWym4Background()));
             if (card.getWym1() != "") {
                 w4.setVisibility(View.VISIBLE);
                 w4.setText(card.getWym1());
@@ -688,10 +803,10 @@ public class Game extends AppCompatActivity {
             TextView punkty = findViewById(R.id.punkty_1_4);
             TableLayout kolor = findViewById(R.id.karta_1_4);
             kolor.setBackground(getDrawable(card.getColorDrawable()));
-            w4.setBackground(getDrawable(card.getWym1_tlo()));
-            w3.setBackground(getDrawable(card.getWym2_tlo()));
-            w1.setBackground(getDrawable(card.getWym3_tlo()));
-            w2.setBackground(getDrawable(card.getWym4_tlo()));
+            w4.setBackground(getDrawable(card.getWym1Background()));
+            w3.setBackground(getDrawable(card.getWym2Background()));
+            w1.setBackground(getDrawable(card.getWym3Background()));
+            w2.setBackground(getDrawable(card.getWym4Background()));
             if (card.getWym1() != "") {
                 w4.setVisibility(View.VISIBLE);
                 w4.setText(card.getWym1());
@@ -727,10 +842,10 @@ public class Game extends AppCompatActivity {
             TextView punkty = findViewById(R.id.punkty_2_1);
             TableLayout kolor = findViewById(R.id.karta_2_1);
             kolor.setBackground(getDrawable(card.getColorDrawable()));
-            w4.setBackground(getDrawable(card.getWym1_tlo()));
-            w3.setBackground(getDrawable(card.getWym2_tlo()));
-            w1.setBackground(getDrawable(card.getWym3_tlo()));
-            w2.setBackground(getDrawable(card.getWym4_tlo()));
+            w4.setBackground(getDrawable(card.getWym1Background()));
+            w3.setBackground(getDrawable(card.getWym2Background()));
+            w1.setBackground(getDrawable(card.getWym3Background()));
+            w2.setBackground(getDrawable(card.getWym4Background()));
             if (card.getWym1() != "") {
                 w4.setVisibility(View.VISIBLE);
                 w4.setText(card.getWym1());
@@ -765,10 +880,10 @@ public class Game extends AppCompatActivity {
             TextView punkty = findViewById(R.id.punkty_2_2);
             TableLayout kolor = findViewById(R.id.karta_2_2);
             kolor.setBackground(getDrawable(card.getColorDrawable()));
-            w4.setBackground(getDrawable(card.getWym1_tlo()));
-            w3.setBackground(getDrawable(card.getWym2_tlo()));
-            w1.setBackground(getDrawable(card.getWym3_tlo()));
-            w2.setBackground(getDrawable(card.getWym4_tlo()));
+            w4.setBackground(getDrawable(card.getWym1Background()));
+            w3.setBackground(getDrawable(card.getWym2Background()));
+            w1.setBackground(getDrawable(card.getWym3Background()));
+            w2.setBackground(getDrawable(card.getWym4Background()));
             if (card.getWym1() != "") {
                 w4.setVisibility(View.VISIBLE);
                 w4.setText(card.getWym1());
@@ -803,10 +918,10 @@ public class Game extends AppCompatActivity {
             TextView punkty = findViewById(R.id.punkty_2_3);
             TableLayout kolor = findViewById(R.id.karta_2_3);
             kolor.setBackground(getDrawable(card.getColorDrawable()));
-            w4.setBackground(getDrawable(card.getWym1_tlo()));
-            w3.setBackground(getDrawable(card.getWym2_tlo()));
-            w1.setBackground(getDrawable(card.getWym3_tlo()));
-            w2.setBackground(getDrawable(card.getWym4_tlo()));
+            w4.setBackground(getDrawable(card.getWym1Background()));
+            w3.setBackground(getDrawable(card.getWym2Background()));
+            w1.setBackground(getDrawable(card.getWym3Background()));
+            w2.setBackground(getDrawable(card.getWym4Background()));
             if (card.getWym1() != "") {
                 w4.setVisibility(View.VISIBLE);
                 w4.setText(card.getWym1());
@@ -841,10 +956,10 @@ public class Game extends AppCompatActivity {
             TextView punkty = findViewById(R.id.punkty_2_4);
             TableLayout kolor = findViewById(R.id.karta_2_4);
             kolor.setBackground(getDrawable(card.getColorDrawable()));
-            w4.setBackground(getDrawable(card.getWym1_tlo()));
-            w3.setBackground(getDrawable(card.getWym2_tlo()));
-            w1.setBackground(getDrawable(card.getWym3_tlo()));
-            w2.setBackground(getDrawable(card.getWym4_tlo()));
+            w4.setBackground(getDrawable(card.getWym1Background()));
+            w3.setBackground(getDrawable(card.getWym2Background()));
+            w1.setBackground(getDrawable(card.getWym3Background()));
+            w2.setBackground(getDrawable(card.getWym4Background()));
             if (card.getWym1() != "") {
                 w4.setVisibility(View.VISIBLE);
                 w4.setText(card.getWym1());
@@ -880,10 +995,10 @@ public class Game extends AppCompatActivity {
             TextView punkty = findViewById(R.id.punkty_3_1);
             TableLayout kolor = findViewById(R.id.karta_3_1);
             kolor.setBackground(getDrawable(card.getColorDrawable()));
-            w4.setBackground(getDrawable(card.getWym1_tlo()));
-            w3.setBackground(getDrawable(card.getWym2_tlo()));
-            w1.setBackground(getDrawable(card.getWym3_tlo()));
-            w2.setBackground(getDrawable(card.getWym4_tlo()));
+            w4.setBackground(getDrawable(card.getWym1Background()));
+            w3.setBackground(getDrawable(card.getWym2Background()));
+            w1.setBackground(getDrawable(card.getWym3Background()));
+            w2.setBackground(getDrawable(card.getWym4Background()));
             if (card.getWym1() != "") {
                 w4.setVisibility(View.VISIBLE);
                 w4.setText(card.getWym1());
@@ -918,10 +1033,10 @@ public class Game extends AppCompatActivity {
             TextView punkty = findViewById(R.id.punkty_3_2);
             TableLayout kolor = findViewById(R.id.karta_3_2);
             kolor.setBackground(getDrawable(card.getColorDrawable()));
-            w4.setBackground(getDrawable(card.getWym1_tlo()));
-            w3.setBackground(getDrawable(card.getWym2_tlo()));
-            w1.setBackground(getDrawable(card.getWym3_tlo()));
-            w2.setBackground(getDrawable(card.getWym4_tlo()));
+            w4.setBackground(getDrawable(card.getWym1Background()));
+            w3.setBackground(getDrawable(card.getWym2Background()));
+            w1.setBackground(getDrawable(card.getWym3Background()));
+            w2.setBackground(getDrawable(card.getWym4Background()));
             if (card.getWym1() != "") {
                 w4.setVisibility(View.VISIBLE);
                 w4.setText(card.getWym1());
@@ -956,10 +1071,10 @@ public class Game extends AppCompatActivity {
             TextView punkty = findViewById(R.id.punkty_3_3);
             TableLayout kolor = findViewById(R.id.karta_3_3);
             kolor.setBackground(getDrawable(card.getColorDrawable()));
-            w4.setBackground(getDrawable(card.getWym1_tlo()));
-            w3.setBackground(getDrawable(card.getWym2_tlo()));
-            w1.setBackground(getDrawable(card.getWym3_tlo()));
-            w2.setBackground(getDrawable(card.getWym4_tlo()));
+            w4.setBackground(getDrawable(card.getWym1Background()));
+            w3.setBackground(getDrawable(card.getWym2Background()));
+            w1.setBackground(getDrawable(card.getWym3Background()));
+            w2.setBackground(getDrawable(card.getWym4Background()));
             punkty.setText(card.getPointsStr());
             if (card.getWym1() != "") {
                 w4.setVisibility(View.VISIBLE);
@@ -994,10 +1109,10 @@ public class Game extends AppCompatActivity {
             TextView punkty = findViewById(R.id.punkty_3_4);
             TableLayout kolor = findViewById(R.id.karta_3_4);
             kolor.setBackground(getDrawable(card.getColorDrawable()));
-            w4.setBackground(getDrawable(card.getWym1_tlo()));
-            w3.setBackground(getDrawable(card.getWym2_tlo()));
-            w1.setBackground(getDrawable(card.getWym3_tlo()));
-            w2.setBackground(getDrawable(card.getWym4_tlo()));
+            w4.setBackground(getDrawable(card.getWym1Background()));
+            w3.setBackground(getDrawable(card.getWym2Background()));
+            w1.setBackground(getDrawable(card.getWym3Background()));
+            w2.setBackground(getDrawable(card.getWym4Background()));
             w1.setText(card.getWym1());
             w2.setText(card.getWym2());
             w3.setText(card.getWym3());
@@ -1031,4 +1146,102 @@ public class Game extends AppCompatActivity {
 
     }
 
+    public void computerPlayer() {
+        int decision = GameStateClient.decision(GameStateClient.returnPlayer());
+        int decisionCheck = GameStateClient.checkDecision(GameStateClient.returnPlayer());
+        Toast.makeText(this, "ile kart"+decisionCheck, Toast.LENGTH_LONG).show();
+        if (decision != -1) {
+            int era = decision / 10;
+            int nr = decision % 10;
+            clickCardComputer(era, nr);
+        } else {
+            int[] chipsState = GameStateClient.getChipsAll();
+            ArrayList<Integer> choosen = new ArrayList<>();
+            for (int i = 0; i < 5; i++) {
+                if (chipsState[i] != 0) {
+                    choosen.add(i);
+                }
+            }
+            Collections.shuffle(choosen);
+            if (choosen.size() > 2) {
+                click3Chips(choosen.get(0), choosen.get(1), choosen.get(2));
+            } else {
+                for (int j = 0; j < choosen.size(); j++) {
+                    if (choosen.get(j) >= 4) {
+                        click2Chips(choosen.get(j));
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public void click3Chips(int a, int b, int c) {
+        GameStateClient.returnPlayer().addChips(a);
+        GameStateClient.decrementChips(a);
+        GameStateClient.returnPlayer().addChips(b);
+        GameStateClient.decrementChips(b);
+        GameStateClient.returnPlayer().addChips(c);
+        GameStateClient.decrementChips(c);
+        setChips();
+        setPlayerField();
+        AlertDialog.Builder alert = new AlertDialog.Builder(Game.this);
+        alert.setTitle("Pobrano 3 razy 1 zeton");
+        alert.setMessage("Teraz tura następnego gracza");
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if (!GameStateClient.nextPlayerTurn()) {
+                    computerPlayer();
+                }
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        setPlayerField();
+                    }
+                }, 1);
+            }
+        });
+        alert.show();
+    }
+
+    public void click2Chips(int nr) {
+        GameStateClient.decrementChips(nr);
+        GameStateClient.decrementChips(nr);
+        GameStateClient.returnPlayer().addChips(nr);
+        GameStateClient.returnPlayer().addChips(nr);
+        setChips();
+        setPlayerField();
+        AlertDialog.Builder alert = new AlertDialog.Builder(Game.this);
+        alert.setTitle("Pobrano 2 takie same zetony");
+        alert.setMessage("Teraz tura następnego gracza");
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if (!GameStateClient.nextPlayerTurn()) {
+                    computerPlayer();
+                }
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        setPlayerField();
+                    }
+                }, 1);
+            }
+        });
+        alert.show();
+
+    }
+
+    public void isWin(){
+        if (GameStateClient.returnPlayer().getPoints() >= 15){
+            AlertDialog.Builder alert = new AlertDialog.Builder(Game.this);
+            alert.setTitle("Wygrana");
+            alert.setMessage("Wygral gracz"+ GameStateClient.returnPlayer().getName());
+            alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+
+                }
+            });
+            alert.show();
+        }
+    }
 }

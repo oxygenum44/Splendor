@@ -38,7 +38,7 @@
                     android:layout_weight="1">
 
                     <TextView
-                        android:id="@+id/arystokrata_1_wymaganie_1"
+                        android:id="@+id/ar1Con1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginRight="1dp"
@@ -82,7 +82,7 @@
                     android:layout_weight="1">
 
                     <TextView
-                        android:id="@+id/arystokrata_1_wymaganie_2"
+                        android:id="@+id/ar1Con2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginRight="1dp"
@@ -99,7 +99,7 @@
                         android:textSize="24sp" />
 
                     <TextView
-                        android:id="@+id/arystokrata_1_wymaganie_3"
+                        android:id="@+id/ar1con3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="1dp"
@@ -137,7 +137,7 @@
                     android:layout_weight="1">
 
                     <TextView
-                        android:id="@+id/arystokrata_2_wymaganie_1"
+                        android:id="@+id/ar2Con1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginRight="1dp"
@@ -181,7 +181,7 @@
                     android:layout_weight="1">
 
                     <TextView
-                        android:id="@+id/arystokrata_2_wymaganie_2"
+                        android:id="@+id/ar2Con2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginRight="1dp"
@@ -198,7 +198,7 @@
                         android:textSize="24sp" />
 
                     <TextView
-                        android:id="@+id/arystokrata_2_wymaganie_3"
+                        android:id="@+id/ar2Con3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="1dp"
@@ -236,7 +236,7 @@
                     android:layout_weight="1">
 
                     <TextView
-                        android:id="@+id/arystokrata_3_wymaganie_1"
+                        android:id="@+id/ar3Con1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginRight="1dp"
@@ -280,7 +280,7 @@
                     android:layout_weight="1">
 
                     <TextView
-                        android:id="@+id/arystokrata_3_wymaganie_2"
+                        android:id="@+id/ar3Con2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginRight="1dp"
@@ -297,7 +297,7 @@
                         android:textSize="24sp" />
 
                     <TextView
-                        android:id="@+id/arystokrata_3_wymaganie_3"
+                        android:id="@+id/ar3Con3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="1dp"
@@ -335,7 +335,7 @@
                     android:layout_weight="1">
 
                     <TextView
-                        android:id="@+id/arystokrata_4_wymaganie_1"
+                        android:id="@+id/ar4Con1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginRight="1dp"
@@ -379,7 +379,7 @@
                     android:layout_weight="1">
 
                     <TextView
-                        android:id="@+id/arystokrata_4_wymaganie_2"
+                        android:id="@+id/ar4Con2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginRight="1dp"
@@ -396,7 +396,7 @@
                         android:textSize="24sp" />
 
                     <TextView
-                        android:id="@+id/arystokrata_4_wymaganie_3"
+                        android:id="@+id/ar4Con3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="1dp"
@@ -434,7 +434,7 @@
                     android:layout_weight="1">
 
                     <TextView
-                        android:id="@+id/arystokrata_5_wymaganie_1"
+                        android:id="@+id/ar5Con1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginRight="1dp"
@@ -478,7 +478,7 @@
                     android:layout_weight="1">
 
                     <TextView
-                        android:id="@+id/arystokrata_5_wymaganie_2"
+                        android:id="@+id/ar5Con2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginRight="1dp"
@@ -495,7 +495,7 @@
                         android:textSize="24sp" />
 
                     <TextView
-                        android:id="@+id/arystokrata_5_wymaganie_3"
+                        android:id="@+id/ar5Con3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="1dp"
@@ -651,7 +651,7 @@
                         android:layout_margin="2.5dp"
                         android:layout_weight="1"
                         android:background="@drawable/karta_era3"
-                        android:onClick="click_card">
+                        android:onClick="clickCard">
 
                         <TableRow
                             android:layout_width="match_parent"
@@ -779,7 +779,7 @@
                         android:layout_margin="2.5dp"
                         android:layout_weight="1"
                         android:background="@drawable/karta_era3"
-                        android:onClick="click_card">
+                        android:onClick="clickCard">
 
                         <TableRow
                             android:layout_width="match_parent"
@@ -905,7 +905,7 @@
                         android:layout_margin="2.5dp"
                         android:layout_weight="1"
                         android:background="@drawable/karta_era3"
-                        android:onClick="click_card">
+                        android:onClick="clickCard">
 
                         <TableRow
                             android:layout_width="match_parent"
@@ -1039,7 +1039,7 @@
                         android:layout_margin="2.5dp"
                         android:layout_weight="1"
                         android:background="@drawable/karta_era3"
-                        android:onClick="click_card">
+                        android:onClick="clickCard">
 
                         <TableRow
                             android:layout_width="match_parent"
@@ -1183,7 +1183,7 @@
                         android:layout_margin="2.5dp"
                         android:layout_weight="1"
                         android:background="@drawable/karta_era2"
-                        android:onClick="click_card">
+                        android:onClick="clickCard">
 
                         <TableRow
                             android:layout_width="match_parent"
@@ -1311,7 +1311,7 @@
                         android:layout_margin="2.5dp"
                         android:layout_weight="1"
                         android:background="@drawable/karta_era2"
-                        android:onClick="click_card">
+                        android:onClick="clickCard">
 
                         <TableRow
                             android:layout_width="match_parent"
@@ -1445,7 +1445,7 @@
                         android:layout_margin="2.5dp"
                         android:layout_weight="1"
                         android:background="@drawable/karta_era2"
-                        android:onClick="click_card">
+                        android:onClick="clickCard">
 
                         <TableRow
                             android:layout_width="match_parent"
@@ -1583,7 +1583,7 @@
                         android:layout_margin="2.5dp"
                         android:layout_weight="1"
                         android:background="@drawable/karta_era2"
-                        android:onClick="click_card">
+                        android:onClick="clickCard">
 
                         <TableRow
                             android:layout_width="match_parent"
@@ -1721,13 +1721,13 @@
                     android:orientation="horizontal">
 
                     <TableLayout
-                        android:id="@+id/karta_1_1"
+                        android:id="@+id/card_1_1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="2.5dp"
                         android:layout_weight="1"
                         android:background="@drawable/karta_era1"
-                        android:onClick="click_card">
+                        android:onClick="clickCard">
 
                         <TableRow
                             android:layout_width="match_parent"
@@ -1750,7 +1750,7 @@
                                 android:visibility="invisible" />
 
                             <TextView
-                                android:id="@+id/punkty_1_1"
+                                android:id="@+id/points_1_1"
                                 android:layout_height="match_parent"
                                 android:layout_margin="1dp"
                                 android:layout_weight="1"
@@ -1851,7 +1851,7 @@
                         android:layout_margin="2.5dp"
                         android:layout_weight="1"
                         android:background="@drawable/karta_era1"
-                        android:onClick="click_card">
+                        android:onClick="clickCard">
 
                         <TableRow
                             android:layout_width="match_parent"
@@ -1981,7 +1981,7 @@
                         android:layout_margin="2.5dp"
                         android:layout_weight="1"
                         android:background="@drawable/karta_era1"
-                        android:onClick="click_card">
+                        android:onClick="clickCard">
 
                         <TableRow
                             android:layout_width="match_parent"
@@ -2111,7 +2111,7 @@
                         android:layout_margin="2.5dp"
                         android:layout_weight="1"
                         android:background="@drawable/karta_era1"
-                        android:onClick="click_card">
+                        android:onClick="clickCard">
 
                         <TableRow
                             android:layout_width="match_parent"
@@ -2248,7 +2248,7 @@
             android:layout_margin="5dp"
             android:layout_weight="2.7"
             android:background="@drawable/beton"
-            android:backgroundTint="@color/gracz1"
+            android:backgroundTint="@color/player1"
             android:backgroundTintMode="multiply"
             android:orientation="horizontal">
 
@@ -2260,7 +2260,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/karta1"
+                    android:id="@+id/card1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
@@ -2310,7 +2310,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/karta2"
+                    android:id="@+id/card2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
@@ -2360,7 +2360,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/karta3"
+                    android:id="@+id/card3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
@@ -2409,7 +2409,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/karta4"
+                    android:id="@+id/card4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
